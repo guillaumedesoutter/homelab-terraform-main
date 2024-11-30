@@ -1,0 +1,43 @@
+stages:
+  - init
+  - plan
+  - apply
+
+variables:
+  TF_VAR_pm_user: $TF_VAR_pm_user
+  TF_VAR_pm_password: $TF_VAR_pm_password
+
+terraform_init:
+  stage: init
+  tags:
+    - terraform
+  script:
+    - terraform init
+  artifacts:
+    paths:
+      - .terraform/
+      - .terraform.lock.hcl
+      - terraform.tfstate
+
+terraform_plan:
+  stage: plan
+  tags:
+    - terraform
+  dependencies:
+    - terraform_init
+  script:
+    - terraform init
+    - terraform plan -var-file=terraform.tfvars -out=tfplan
+  artifacts:
+    paths:
+      - tfplan
+
+terraform_apply:
+  stage: apply
+  tags:
+    - terraform
+  dependencies:
+    - terraform_plan
+  script:
+    - terraform init
+    - terraform apply -auto-approve tfplan

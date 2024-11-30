@@ -1,0 +1,7 @@
+# Fichiers Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+# Fichiers temporaires
+*.log
